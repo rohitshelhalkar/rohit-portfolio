@@ -57,7 +57,7 @@ export default function SkillsSection() {
             const skillId = entry.target.getAttribute("data-skill-id");
             if (skillId) {
               setTimeout(() => {
-                setAnimatedSkills((prev) => [...new Set([...prev, skillId])]);
+                setAnimatedSkills((prev) => Array.from(new Set([...prev, skillId])));
               }, 100);
             }
           }

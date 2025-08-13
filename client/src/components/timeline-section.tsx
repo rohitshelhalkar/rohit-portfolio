@@ -59,7 +59,7 @@ export default function TimelineSection() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const itemId = parseInt(entry.target.getAttribute("data-item-id") || "0");
-            setVisibleItems((prev) => [...new Set([...prev, itemId])]);
+            setVisibleItems((prev) => Array.from(new Set([...prev, itemId])));
           }
         });
       },
