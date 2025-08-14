@@ -6,30 +6,32 @@ const timelineItems = [
     id: 1,
     period: "Nov 2021 - Present",
     position: "Lead Software Engineer",
-    company: "Fold Health",
-    description: "Leading end-to-end development of healthcare CRM platform with team of 5+ engineers. Architecting scalable modules using React, Nest.js and GraphQL.",
-    technologies: ["React.js", "Nest.js", "GraphQL"],
+    company: "FoldHealth",
+    description: "As one of the earliest employees, helped define the technology stack and built core product modules from the ground up. Built Healthcare CRM platform and omnichannel communication engine.",
+    technologies: ["React", "Node.js", "NestJS", "PostgreSQL", "Hasura", "GraphQL", "TypeScript"],
     color: "medical-blue",
     side: "right",
     achievements: [
-      "50% increase in user engagement",
-      "70% reduction in production bugs",
-      "30% improvement in team efficiency"
+      "Built Healthcare CRM with Stripe payment integration",
+      "Developed omnichannel communication engine (in-app, email, SMS)",
+      "Created dynamic reporting engine with Power BI and BigQuery integration",
+      "Implemented scalable JWT authentication with rotational keys"
     ]
   },
   {
     id: 2,
     period: "Jun 2017 - Oct 2021",
     position: "Senior Member of Technical Staff",
-    company: "Athenahealth",
-    description: "Developed user-centric healthcare applications using Angular 4 and React + Redux. Led frontend development of OneChart module for unified patient records.",
-    technologies: ["Angular", "React", "Node.js"],
+    company: "AthenaHealth",
+    description: "After AthenaHealth acquired Praxify, moved into senior engineering role contributing to multiple healthcare technology solutions including medical imaging and secure communication platforms.",
+    technologies: ["Java", "Angular", "Vue.js", "React", "Vert.x", "Redis", "Spring Boot"],
     color: "healthcare-green",
     side: "left",
     achievements: [
-      "Unified patient records across platforms",
-      "Real-time messaging system implementation",
-      "Mobile DICOM viewer for iOS"
+      "Developed medical imaging viewer for real-time diagnostic scans",
+      "Built internal configuration management system for microservices",
+      "Created secure provider communication platform with real-time messaging",
+      "Designed unified health record views with data reconciliation workflows"
     ]
   },
   {
@@ -37,14 +39,15 @@ const timelineItems = [
     period: "Jun 2014 - Oct 2017",
     position: "Web Developer",
     company: "Praxify",
-    description: "Started career journey by co-organizing company-wide hackathons and delivering user-centric healthcare solutions aligned with clinical workflows.",
-    technologies: ["JavaScript", "HTML/CSS", "PHP"],
+    description: "Began career after completing MCA through campus placement. Worked on multi-tenant healthcare applications building modules for patient records and encounter workflows.",
+    technologies: ["Java (Servlets, JSF)", "jQuery", "Maven"],
     color: "warm-orange",
     side: "right",
     achievements: [
-      "Co-organized company hackathons",
-      "Delivered clinical workflow solutions",
-      "Supported talent identification"
+      "Improved frontend performance with modular jQuery approach",
+      "Introduced feature rollout toggles for controlled deployment",
+      "Contributed to multi-tenant healthcare applications",
+      "Participated in internal hackathon for deployment strategies"
     ]
   }
 ];

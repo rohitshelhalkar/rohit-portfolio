@@ -4,36 +4,45 @@ import { ExternalLink, ChevronRight } from "lucide-react";
 const projects = [
   {
     id: 1,
-    title: "Healthcare CRM Platform",
-    company: "Fold Health",
-    description: "Led development of comprehensive CRM platform for healthcare providers, enabling seamless patient management, appointment scheduling, and provider communication.",
+    title: "Healthcare CRM & Communication Platform",
+    company: "FoldHealth",
+    description: "Built comprehensive CRM platform with membership management, Stripe payment integration, and omnichannel communication engine supporting secure messaging, email (Gmail/Outlook), and SMS (Twilio) with real-time delivery.",
     image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&h=600",
-    technologies: ["React.js", "Nest.js", "GraphQL", "TypeScript"],
+    technologies: ["React", "Node.js", "NestJS", "PostgreSQL", "Hasura", "GraphQL", "Stripe", "Twilio"],
     achievements: [
-      "50% increase in user engagement",
-      "70% reduction in production bugs",
-      "30% improvement in team efficiency"
+      "Built from ground up as earliest employee",
+      "Integrated Power BI and BigQuery for advanced analytics",
+      "Created dynamic reporting engine without code changes",
+      "Implemented JWT authentication with rotational keys"
     ],
     isFeatured: true
   },
   {
     id: 2,
-    title: "OneChart Patient Records",
-    company: "Athenahealth",
-    description: "Unified patient records system enabling seamless data access across multiple healthcare platforms and providers.",
+    title: "Medical Imaging & Unified Health Records",
+    company: "AthenaHealth",
+    description: "Developed medical imaging viewer for real-time diagnostic scan access and designed unified health record views aggregating data from multiple systems with reconciliation workflows.",
     image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
-    technologies: ["Angular", "Redux", "Node.js"],
-    achievements: [],
+    technologies: ["Java", "Angular", "Vue.js", "React", "Vert.x", "Redis"],
+    achievements: [
+      "Real-time diagnostic scan viewing",
+      "Data reconciliation across multiple systems",
+      "Secure provider communication platform"
+    ],
     isFeatured: false
   },
   {
     id: 3,
-    title: "DICOM Mobile Viewer",
-    company: "Innovation Project",
-    description: "Mobile-responsive medical imaging viewer integrated into native iOS app for on-the-go diagnostic capabilities.",
+    title: "Multi-Tenant Healthcare Platform",
+    company: "Praxify",
+    description: "Built patient records and encounter workflow modules for multi-tenant healthcare applications with improved performance through modular architecture and feature rollout controls.",
     image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
-    technologies: ["iOS", "DICOM", "React Native"],
-    achievements: [],
+    technologies: ["Java (Servlets, JSF)", "jQuery", "Maven"],
+    achievements: [
+      "Modular jQuery approach for performance",
+      "Feature rollout toggle implementation",
+      "Multi-tenant architecture support"
+    ],
     isFeatured: false
   }
 ];

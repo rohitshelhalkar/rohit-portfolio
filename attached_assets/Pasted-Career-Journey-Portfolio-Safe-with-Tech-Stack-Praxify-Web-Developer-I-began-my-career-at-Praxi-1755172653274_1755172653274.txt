@@ -1,0 +1,40 @@
+Career Journey (Portfolio-Safe with Tech Stack)
+
+Praxify – Web Developer
+
+I began my career at Praxify after completing my MCA, joining through campus placement.
+	•	Worked on web development using Java (Servlets, JSF), jQuery, and Maven for deployment.
+	•	Contributed to multi-tenant healthcare applications, building modules for patient records and encounter workflows.
+	•	Improved frontend rendering performance by adopting a modular jQuery approach, significantly reducing load times.
+	•	Introduced feature rollout toggles, enabling controlled deployment of new features across different customers.
+	•	Participated in an internal hackathon to showcase innovative deployment strategies.
+
+Tech Stack: Java (Servlets, JSF), jQuery, Maven, Multi-tenant architecture
+
+⸻
+
+AthenaHealth – Senior Member of Technical Staff
+
+After AthenaHealth acquired Praxify, I moved into a senior engineering role and contributed to multiple healthcare technology solutions.
+	•	Developed a medical imaging viewer for providers to access and review diagnostic scans in real time.
+	•	Built an internal configuration management system for microservices and frontend applications, ensuring version control and consistency.
+	•	Contributed to a secure provider communication platform, enabling real-time messaging and collaboration between healthcare professionals.
+	•	Designed and implemented unified health record views, aggregating data from multiple systems with reconciliation workflows.
+	•	Implemented a secure login flow using JWT with rotational keys to strengthen authentication for critical applications.
+
+Tech Stack: Core Java, Angular, Vue.js, React, Vert.x, Redis, Spring Boot, JWT
+
+⸻
+
+FoldHealth – Lead Software Engineer
+
+As one of the earliest employees at FoldHealth, I played a key role in defining the technology stack and building core product modules from the ground up.
+	•	Helped finalize the stack: React, Node.js, NestJS, PostgreSQL, Hasura (GraphQL).
+	•	Built a Healthcare CRM platform, streamlining patient and clinic management.
+	•	Developed a membership management solution with Stripe payment integration and automated communication via Mailgun.
+	•	Designed an omnichannel communication engine, supporting secure in-app messaging, email (Gmail/Outlook), and SMS (Twilio) with real-time delivery and role-based access.
+	•	Created a reporting engine where users could generate dynamic reports without code changes.
+	•	Integrated business intelligence tools: Power BI, BigQuery, Cube.js for advanced analytics and reporting.
+	•	Implemented a scalable authentication system using JWT with rotational keys for both web and patient-facing applications.
+
+Tech Stack: Java, JavaScript, Typescript, React, Node.js, NestJS, PostgreSQL, Hasura (GraphQL), Stripe, Mailgun, Twilio, Gmail/Outlook APIs, WebSockets, Power BI, BigQuery, Cube.js, JWT

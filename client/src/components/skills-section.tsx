@@ -9,31 +9,34 @@ const skillCategories = [
     color: "medical-blue",
     skills: [
       { name: "React.js", level: 95 },
-      { name: "TypeScript", level: 90 },
-      { name: "Angular", level: 85 },
-      { name: "Vue.js", level: 80 }
+      { name: "TypeScript", level: 92 },
+      { name: "Angular", level: 88 },
+      { name: "Vue.js", level: 85 },
+      { name: "jQuery", level: 80 }
     ]
   },
   {
-    title: "Backend Development",
+    title: "Backend & Infrastructure",
     icon: Server,
     color: "healthcare-green",
     skills: [
-      { name: "Node.js", level: 92 },
-      { name: "Nest.js", level: 88 },
-      { name: "GraphQL", level: 85 },
-      { name: "Java", level: 75 }
+      { name: "Node.js", level: 95 },
+      { name: "NestJS", level: 92 },
+      { name: "Java", level: 90 },
+      { name: "GraphQL", level: 88 },
+      { name: "PostgreSQL", level: 85 },
+      { name: "Redis", level: 80 }
     ]
   },
   {
-    title: "Leadership & Management",
+    title: "Leadership & Architecture",
     icon: Users,
     color: "warm-orange",
     skills: [
       { name: "Team Leadership", level: 95 },
+      { name: "System Architecture", level: 92 },
       { name: "Agile/Scrum", level: 90 },
-      { name: "Mentoring", level: 88 },
-      { name: "Project Management", level: 85 }
+      { name: "Mentoring", level: 88 }
     ]
   }
 ];

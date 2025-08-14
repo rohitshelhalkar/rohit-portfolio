@@ -34,31 +34,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Resume download endpoint
   app.get("/api/download-resume", (req, res) => {
-    // In a real application, you would serve the actual resume file
-    // For now, we'll create a simple response
-    const resumeData = `
+    const resumePath = path.join(__dirname, '../attached_assets/Rohit_Shelhalkar_1755117427760.pdf');
+    
+    // Check if file exists
+    if (fs.existsSync(resumePath)) {
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename="Rohit_Shelhalkar_Resume.pdf"');
+      res.sendFile(resumePath);
+    } else {
+      // Fallback if PDF not found
+      const resumeData = `
 ROHIT SHELHALKAR
 Healthcare Technology Leader
 
 EXPERIENCE:
-• Lead Software Engineer at Fold Health (Nov 2021 - Present)
-• Senior Member of Technical Staff at Athenahealth (Jun 2017 - Oct 2021)
-• Web Developer at Praxify (Jun 2014 - Oct 2017)
+• Lead Software Engineer at FoldHealth (Nov 2021 - Present)
+  - Built Healthcare CRM with Stripe payment integration and omnichannel communication
+  - Integrated Power BI, BigQuery for advanced analytics and reporting
+  - Implemented JWT authentication with rotational keys
 
-SKILLS:
-• React.js, TypeScript, Node.js, Nest.js, GraphQL
-• Healthcare Domain Expertise
-• Team Leadership & Agile Methodologies
+• Senior Member of Technical Staff at AthenaHealth (Jun 2017 - Oct 2021)
+  - Developed medical imaging viewer for real-time diagnostic scans
+  - Built secure provider communication platform with real-time messaging
+  - Created unified health record views with data reconciliation workflows
+
+• Web Developer at Praxify (Jun 2014 - Oct 2017)
+  - Built multi-tenant healthcare applications with patient records modules
+  - Improved frontend performance with modular jQuery approach
+  - Introduced feature rollout toggles for controlled deployment
+
+TECHNICAL SKILLS:
+• Frontend: React, TypeScript, Angular, Vue.js, jQuery
+• Backend: Node.js, NestJS, Java, GraphQL, PostgreSQL, Redis
+• Healthcare: Medical imaging, EHR systems, HIPAA compliance
+• Leadership: Team management, system architecture, agile methodologies
 
 CONTACT:
 Email: rohitshelhalkar17@gmail.com
 Phone: +91-9657066980
 Location: Pune, India
-    `.trim();
+      `.trim();
 
-    res.setHeader('Content-Type', 'text/plain');
-    res.setHeader('Content-Disposition', 'attachment; filename="Rohit_Shelhalkar_Resume.txt"');
-    res.send(resumeData);
+      res.setHeader('Content-Type', 'text/plain');
+      res.setHeader('Content-Disposition', 'attachment; filename="Rohit_Shelhalkar_Resume.txt"');
+      res.send(resumeData);
+    }
   });
 
   const httpServer = createServer(app);
