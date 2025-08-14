@@ -92,25 +92,72 @@ export default function TimelineSection() {
         </motion.div>
 
         <div className="relative">
-          {/* Timeline line */}
-          <div className="absolute left-1/2 transform -translate-x-0.5 w-1 h-full bg-gradient-to-b from-medical-blue to-healthcare-green"></div>
+          {/* Timeline line - hidden on mobile */}
+          <div className="hidden lg:block absolute left-1/2 transform -translate-x-0.5 w-1 h-full bg-gradient-to-b from-medical-blue to-healthcare-green"></div>
+          
+          {/* Mobile timeline line */}
+          <div className="lg:hidden absolute left-8 top-0 w-1 h-full bg-gradient-to-b from-medical-blue to-healthcare-green"></div>
 
           {timelineItems.map((item, index) => (
             <motion.div
               key={item.id}
               data-item-id={item.id}
-              className={`relative flex items-center justify-between mb-16 ${
-                item.side === "left" ? "flex-row-reverse" : ""
+              className={`relative mb-16 lg:mb-16 ${
+                // Desktop layout: alternate sides
+                "lg:flex lg:items-center lg:justify-between " +
+                (item.side === "left" ? "lg:flex-row-reverse" : "")
               }`}
-              initial={{ opacity: 0, x: item.side === "left" ? 50 : -50 }}
+              initial={{ opacity: 0, x: -50 }}
               animate={{
                 opacity: visibleItems.includes(item.id) ? 1 : 0,
-                x: visibleItems.includes(item.id) ? 0 : item.side === "left" ? 50 : -50,
+                x: visibleItems.includes(item.id) ? 0 : -50,
               }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
               data-testid={`timeline-item-${item.id}`}
             >
-              <div className={`w-5/12 ${item.side === "left" ? "pl-8" : "text-right pr-8"}`}>
+              {/* Mobile layout: single column */}
+              <div className="lg:hidden pl-16">
+                <div className={`bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-l-4 border-${item.color}`}>
+                  <div className={`text-sm font-medium mb-2 text-${item.color}`}>
+                    {item.period}
+                  </div>
+                  <h3 className="text-xl font-bold text-charcoal mb-2">{item.position}</h3>
+                  <h4 className="text-lg text-deep-rose font-medium mb-3">{item.company}</h4>
+                  <p className="text-gray-600 text-sm mb-4">{item.description}</p>
+                  
+                  <div className="mb-4">
+                    <h5 className="text-sm font-medium text-charcoal mb-2">Key Achievements:</h5>
+                    <ul className="text-xs text-gray-600 space-y-1">
+                      {item.achievements.map((achievement, idx) => (
+                        <li key={idx} className="flex items-start">
+                          <div className="w-1.5 h-1.5 bg-healthcare-green rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                          {achievement}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {item.technologies.map((tech) => (
+                      <span
+                        key={tech}
+                        className={`px-2 py-1 bg-${item.color}/10 text-${item.color} text-xs rounded`}
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Mobile timeline dot */}
+                <div
+                  className={`absolute left-8 transform -translate-x-1/2 w-4 h-4 bg-${item.color} rounded-full border-3 border-white shadow-lg`}
+                  style={{ top: '2rem' }}
+                ></div>
+              </div>
+
+              {/* Desktop layout: alternating sides */}
+              <div className={`hidden lg:block w-5/12 ${item.side === "left" ? "pl-8" : "text-right pr-8"}`}>
                 <div
                   className={`bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 ${
                     item.side === "left" ? `border-r-4 border-${item.color}` : `border-l-4 border-${item.color}`
@@ -127,8 +174,8 @@ export default function TimelineSection() {
                     <h5 className="text-sm font-medium text-charcoal mb-2">Key Achievements:</h5>
                     <ul className="text-xs text-gray-600 space-y-1">
                       {item.achievements.map((achievement, idx) => (
-                        <li key={idx} className="flex items-center">
-                          <div className="w-1.5 h-1.5 bg-healthcare-green rounded-full mr-2"></div>
+                        <li key={idx} className="flex items-start">
+                          <div className="w-1.5 h-1.5 bg-healthcare-green rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
                           {achievement}
                         </li>
                       ))}
@@ -148,11 +195,12 @@ export default function TimelineSection() {
                 </div>
               </div>
               
+              {/* Desktop timeline dot */}
               <div
-                className={`absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-${item.color} rounded-full border-4 border-white shadow-lg`}
+                className={`hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-${item.color} rounded-full border-4 border-white shadow-lg`}
               ></div>
               
-              <div className="w-5/12"></div>
+              <div className="hidden lg:block w-5/12"></div>
             </motion.div>
           ))}
         </div>
