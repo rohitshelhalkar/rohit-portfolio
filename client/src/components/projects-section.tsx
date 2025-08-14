@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ExternalLink, ChevronRight } from "lucide-react";
+import { useLocation } from "wouter";
 
 const projects = [
   {
@@ -36,7 +37,7 @@ const projects = [
     title: "Multi-Tenant Healthcare Platform",
     company: "Praxify",
     description: "Built patient records and encounter workflow modules for multi-tenant healthcare applications with improved performance through modular architecture and feature rollout controls.",
-    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
+    image: "https://images.unsplash.com/photo-1504813184591-01572f98c85f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
     technologies: ["Java (Servlets, JSF)", "jQuery", "Maven"],
     achievements: [
       "Modular jQuery approach for performance",
@@ -48,6 +49,7 @@ const projects = [
 ];
 
 export default function ProjectsSection() {
+  const [, setLocation] = useLocation();
   return (
     <section id="projects" className="py-20 bg-gradient-to-br from-clinical-white to-medical-blue/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -111,6 +113,7 @@ export default function ProjectsSection() {
                     </div>
 
                     <button
+                      onClick={() => setLocation('/projects')}
                       className="bg-medical-blue text-white px-6 py-3 rounded-lg hover:bg-medical-blue/90 transition-colors duration-200 font-medium flex items-center gap-2"
                       data-testid={`button-view-project-${project.id}`}
                     >
@@ -155,6 +158,7 @@ export default function ProjectsSection() {
                       ))}
                     </div>
                     <button
+                      onClick={() => setLocation('/projects')}
                       className="text-healthcare-green hover:text-healthcare-green/80 font-medium text-sm flex items-center gap-1"
                       data-testid={`button-learn-more-${project.id}`}
                     >
@@ -176,6 +180,7 @@ export default function ProjectsSection() {
           viewport={{ once: true }}
         >
           <button
+            onClick={() => setLocation('/projects')}
             className="border border-medical-blue text-medical-blue px-8 py-3 rounded-lg hover:bg-medical-blue hover:text-white transition-colors duration-200 font-medium"
             data-testid="button-view-all-projects"
           >

@@ -4,6 +4,16 @@
 
 This is a professional portfolio website for Rohit Shelhalkar, a healthcare technology leader with over 10 years of experience. The application is built as a full-stack web application featuring a React frontend with a Node.js/Express backend, designed to showcase professional experience, projects, and skills in the healthcare technology domain.
 
+## Recent Changes (August 2025)
+
+- Implemented comprehensive projects page with detailed case studies
+- Added functional navigation between home and projects pages
+- Fixed image serving for attached assets including professional photo
+- Updated all content with authentic career details from Rohit's actual experience
+- Enhanced resume download with detailed professional summary
+- Added "Learn More" and "View All Projects" functionality with proper routing
+- Integrated real project images and comprehensive project descriptions
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
