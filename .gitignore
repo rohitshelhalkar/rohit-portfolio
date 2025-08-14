@@ -3,6 +3,8 @@ node_modules/
 yarn.lock
 package-lock.json
 
+# Production build
+dist/
 
 # Environment variables
 .env
