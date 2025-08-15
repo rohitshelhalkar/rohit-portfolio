@@ -7,14 +7,14 @@ const projects = [
     id: 1,
     title: "Healthcare CRM & Communication Platform",
     company: "FoldHealth",
-    description: "Built comprehensive CRM platform with membership management, Stripe payment integration, and omnichannel communication engine supporting secure messaging, email (Gmail/Outlook), and SMS (Twilio) with real-time delivery.",
+    description: "Built comprehensive CRM platform with membership management, Stripe payment integration, omnichannel communication engine, and complete authentication system with JWT rotational keys.",
     image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&h=600",
-    technologies: ["React", "Node.js", "NestJS", "PostgreSQL", "Hasura", "GraphQL", "Stripe", "Twilio"],
+    technologies: ["React", "Node.js", "NestJS", "PostgreSQL", "Hasura", "GraphQL", "Stripe", "Twilio", "JWT"],
     achievements: [
       "Built from ground up as earliest employee",
       "Integrated Power BI and BigQuery for advanced analytics",
       "Created dynamic reporting engine without code changes",
-      "Implemented JWT authentication with rotational keys"
+      "Implemented complete login, authentication & authorization with JWT rotational keys"
     ],
     isFeatured: true
   },

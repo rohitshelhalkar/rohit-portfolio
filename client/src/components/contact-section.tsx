@@ -79,6 +79,9 @@ export default function ContactSection() {
             viewport={{ once: true }}
           >
             <h3 className="text-2xl font-bold text-charcoal mb-6">Send a Message</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Messages are stored in the database and can be reviewed through the admin panel.
+            </p>
             
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" data-testid="contact-form">

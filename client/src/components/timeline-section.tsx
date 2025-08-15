@@ -4,18 +4,18 @@ import { useEffect, useRef, useState } from "react";
 const timelineItems = [
   {
     id: 1,
-    period: "Nov 2021 - Present",
+    period: "Nov 2021 - Mar 2025",
     position: "Lead Software Engineer",
     company: "FoldHealth",
-    description: "As one of the earliest employees, helped define the technology stack and built core product modules from the ground up. Built Healthcare CRM platform and omnichannel communication engine.",
-    technologies: ["React", "Node.js", "NestJS", "PostgreSQL", "Hasura", "GraphQL", "TypeScript"],
+    description: "As one of the earliest employees, helped define the technology stack and built core product modules from the ground up. Built Healthcare CRM platform, omnichannel communication engine, and complete authentication system.",
+    technologies: ["React", "Node.js", "NestJS", "PostgreSQL", "Hasura", "GraphQL", "TypeScript", "JWT"],
     color: "medical-blue",
     side: "right",
     achievements: [
       "Built Healthcare CRM with Stripe payment integration",
       "Developed omnichannel communication engine (in-app, email, SMS)",
       "Created dynamic reporting engine with Power BI and BigQuery integration",
-      "Implemented scalable JWT authentication with rotational keys"
+      "Implemented complete authentication & authorization with JWT rotational keys"
     ]
   },
   {

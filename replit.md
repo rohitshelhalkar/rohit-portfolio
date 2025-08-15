@@ -6,13 +6,17 @@ This is a professional portfolio website for Rohit Shelhalkar, a healthcare tech
 
 ## Recent Changes (August 2025)
 
-- Implemented comprehensive projects page with detailed case studies
-- Added functional navigation between home and projects pages
+- Implemented comprehensive projects page with 5 detailed project case studies (latest to oldest sequence)
+- Added functional navigation between home and projects pages with proper routing
 - Fixed image serving for attached assets including professional photo
-- Updated all content with authentic career details from Rohit's actual experience
-- Enhanced resume download with detailed professional summary
-- Added "Learn More" and "View All Projects" functionality with proper routing
-- Integrated real project images and comprehensive project descriptions
+- Updated all content with correct career timeline (ended FoldHealth in Mar 2025, not present)
+- Enhanced resume download with detailed professional summary and education
+- Added Education section with Bachelor's and Master's degrees from Pune University
+- Integrated JWT authentication functionality into FoldHealth project (not separate)
+- Removed impact metrics as requested (cannot be directly calculated)
+- Added contact form functionality explanation (messages stored in database)
+- Updated LinkedIn URL to correct profile: www.linkedin.com/in/rohit-shelhalkar-728879137
+- Projects now ordered chronologically from latest (2025) to oldest (2014)
 
 ## User Preferences
 

@@ -53,7 +53,7 @@ Technical Lead with 10+ years of experience in healthcare technology, specializi
 
 CORE EXPERIENCE
 
-FOLDHEALTH - Lead Software Engineer (Nov 2021 - Present)
+FOLDHEALTH - Lead Software Engineer (Nov 2021 - Mar 2025)
 • Led end-to-end development of healthcare CRM platform with team of 5+ engineers
 • Architected scalable modules using React, NestJS, and GraphQL, boosting user engagement by 50%
 • Built comprehensive CRM with membership management and Stripe payment integration
