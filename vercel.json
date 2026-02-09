@@ -1,0 +1,8 @@
+{
+  "buildCommand": "cd client && npm install --legacy-peer-deps || true && cd .. && npx vite build --config vite.config.ts",
+  "outputDirectory": "dist/public",
+  "installCommand": "npm install",
+  "rewrites": [
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
+}
