@@ -7,7 +7,7 @@ const educationData = [
     id: 1,
     degree: "Master of Computer Applications (MCA)",
     institution: "Pune University",
-    year: "2012 - 2014",
+    year: "2011 - 2014",
     location: "Pune, India",
     description: "Advanced computer applications with focus on software development, database management, and system analysis.",
     color: "medical-blue"
@@ -16,7 +16,7 @@ const educationData = [
     id: 2,
     degree: "Bachelor of Computer Applications (BCA)",
     institution: "Pune University", 
-    year: "2009 - 2012",
+    year: "2007 - 2010",
     location: "Pune, India",
     description: "Computer applications fundamentals including programming, software engineering, and web technologies.",
     color: "healthcare-green"

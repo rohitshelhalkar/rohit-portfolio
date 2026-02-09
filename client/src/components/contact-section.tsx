@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -11,11 +11,44 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Mail, Phone, MapPin, Linkedin, Github, Globe } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Github, Globe, Shield } from "lucide-react";
+
+// Turnstile Site Key (get from Cloudflare dashboard)
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 export default function ContactSection() {
   const { toast } = useToast();
-  
+  const [formLoadTime] = useState(() => Date.now());
+  const [honeypot, setHoneypot] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [remainingMessages, setRemainingMessages] = useState<number | null>(null);
+  const turnstileRef = useRef<HTMLDivElement>(null);
+
+  // Load Turnstile script
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY) return;
+
+    const script = document.createElement('script');
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+
+    script.onload = () => {
+      if (turnstileRef.current && (window as any).turnstile) {
+        (window as any).turnstile.render(turnstileRef.current, {
+          sitekey: TURNSTILE_SITE_KEY,
+          callback: (token: string) => setTurnstileToken(token),
+          'expired-callback': () => setTurnstileToken(null),
+        });
+      }
+    };
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
+
   const form = useForm<InsertContact>({
     resolver: zodResolver(insertContactSchema),
     defaultValues: {
@@ -29,16 +62,38 @@ export default function ContactSection() {
 
   const contactMutation = useMutation({
     mutationFn: async (data: InsertContact) => {
-      return apiRequest("POST", "/api/contact", data);
+      const payload = {
+        ...data,
+        honeypot,
+        timestamp: formLoadTime.toString(),
+        turnstileToken,
+      };
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to send message");
+      }
+      return result;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast({
         title: "Message sent successfully!",
         description: "Thank you for reaching out. I'll get back to you soon.",
       });
       form.reset();
+      if (data.remaining !== undefined) {
+        setRemainingMessages(data.remaining);
+      }
+      // Reset Turnstile
+      if ((window as any).turnstile && turnstileRef.current) {
+        (window as any).turnstile.reset(turnstileRef.current);
+      }
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Error sending message",
         description: error.message || "Please try again later.",
@@ -72,20 +127,43 @@ export default function ContactSection() {
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Contact Form */}
           <motion.div
-            className="bg-white p-8 rounded-xl shadow-lg"
+            className="bg-white p-6 sm:p-8 rounded-xl shadow-lg"
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-2xl font-bold text-charcoal mb-6">Send a Message</h3>
-            <p className="text-sm text-gray-500 mb-4">
+            <h3 className="text-2xl font-bold text-charcoal mb-4">Send a Message</h3>
+            <p className="text-sm text-gray-500 mb-6">
               I'll respond to your message within 24-48 hours.
             </p>
-            
+
+            {remainingMessages !== null && remainingMessages <= 2 && (
+              <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800">
+                <Shield className="inline h-4 w-4 mr-1" />
+                {remainingMessages === 0
+                  ? "You've reached the message limit. Please try again later."
+                  : `${remainingMessages} message${remainingMessages === 1 ? '' : 's'} remaining this hour.`}
+              </div>
+            )}
+
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" data-testid="contact-form">
-                <div className="grid md:grid-cols-2 gap-6">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5" data-testid="contact-form">
+                {/* Honeypot field - hidden from users, visible to bots */}
+                <div className="absolute left-[-9999px]" aria-hidden="true">
+                  <label htmlFor="website">Website</label>
+                  <input
+                    type="text"
+                    id="website"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                  />
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
                   <FormField
                     control={form.control}
                     name="firstName"
@@ -185,21 +263,33 @@ export default function ContactSection() {
                   )}
                 />
 
+                {/* Cloudflare Turnstile Widget */}
+                {TURNSTILE_SITE_KEY && (
+                  <div className="flex justify-center">
+                    <div ref={turnstileRef}></div>
+                  </div>
+                )}
+
                 <Button
                   type="submit"
                   className="w-full bg-medical-blue hover:bg-medical-blue/90"
-                  disabled={contactMutation.isPending}
+                  disabled={contactMutation.isPending || (TURNSTILE_SITE_KEY && !turnstileToken)}
                   data-testid="button-send-message"
                 >
                   {contactMutation.isPending ? "Sending..." : "Send Message"}
                 </Button>
+
+                <p className="text-xs text-gray-400 text-center flex items-center justify-center gap-1">
+                  <Shield className="h-3 w-3" />
+                  Protected by rate limiting & spam detection
+                </p>
               </form>
             </Form>
           </motion.div>
 
           {/* Contact Info */}
           <motion.div
-            className="space-y-8"
+            className="space-y-6 sm:space-y-8"
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
@@ -214,7 +304,7 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <div className="font-medium text-charcoal">Email</div>
-                    <div className="text-gray-600">rohitshelhalkar17@gmail.com</div>
+                    <div className="text-gray-600 text-sm sm:text-base">rohitshelhalkar17@gmail.com</div>
                   </div>
                 </div>
 
