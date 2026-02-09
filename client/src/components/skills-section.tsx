@@ -8,10 +8,10 @@ const skillCategories = [
     icon: Code,
     color: "medical-blue",
     skills: [
-      { name: "React.js", level: 95 },
-      { name: "TypeScript", level: 92 },
-      { name: "Angular", level: 88 },
-      { name: "Vue.js", level: 85 },
+      { name: "React.js", level: 90 },
+      { name: "TypeScript", level: 90 },
+      { name: "Angular", level: 80 },
+      { name: "Vue.js", level: 70 },
       { name: "jQuery", level: 80 }
     ]
   },
@@ -20,12 +20,12 @@ const skillCategories = [
     icon: Server,
     color: "healthcare-green",
     skills: [
-      { name: "Node.js", level: 95 },
-      { name: "NestJS", level: 92 },
-      { name: "Java", level: 90 },
-      { name: "GraphQL", level: 88 },
-      { name: "PostgreSQL", level: 85 },
-      { name: "Redis", level: 80 }
+      { name: "Node.js", level: 90 },
+      { name: "NestJS", level: 90 },
+      { name: "Java", level: 80 },
+      { name: "GraphQL", level: 70 },
+      { name: "PostgreSQL", level: 80 },
+      { name: "Redis", level: 70 }
     ]
   },
   {
@@ -33,10 +33,10 @@ const skillCategories = [
     icon: Users,
     color: "warm-orange",
     skills: [
-      { name: "Team Leadership", level: 95 },
-      { name: "System Architecture", level: 92 },
+      { name: "Team Leadership", level: 90 },
+      { name: "System Architecture", level: 80 },
       { name: "Agile/Scrum", level: 90 },
-      { name: "Mentoring", level: 88 }
+      { name: "Mentoring", level: 80 }
     ]
   }
 ];
@@ -91,11 +91,11 @@ export default function SkillsSection() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {skillCategories.map((category, categoryIndex) => (
             <motion.div
               key={category.title}
-              className={`bg-gradient-to-br from-${category.color}/5 to-${category.color}/10 p-8 rounded-xl`}
+              className={`bg-gradient-to-br from-${category.color}/5 to-${category.color}/10 p-6 sm:p-8 rounded-xl`}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: categoryIndex * 0.2 }}
@@ -139,14 +139,14 @@ export default function SkillsSection() {
 
         {/* Healthcare Domain Expertise */}
         <motion.div
-          className="mt-16 bg-gradient-to-r from-medical-blue/10 to-healthcare-green/10 p-8 rounded-xl"
+          className="mt-12 lg:mt-16 bg-gradient-to-r from-medical-blue/10 to-healthcare-green/10 p-6 sm:p-8 rounded-xl"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h3 className="text-2xl font-bold text-charcoal text-center mb-8">Healthcare Domain Expertise</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <h3 className="text-xl sm:text-2xl font-bold text-charcoal text-center mb-6 sm:mb-8">Healthcare Domain Expertise</h3>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {domainExpertise.map((domain, index) => (
               <motion.div
                 key={domain.title}

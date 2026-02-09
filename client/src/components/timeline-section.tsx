@@ -4,6 +4,22 @@ import { useEffect, useRef, useState } from "react";
 const timelineItems = [
   {
     id: 1,
+    period: "Jul 2025 - Dec 2025",
+    position: "Full Stack Developer (Contract)",
+    company: "Pixel Health",
+    description: "Led end-to-end development of a healthcare Care Companion platform enabling secure patient–provider messaging, personalized guidance, educational content, and emergency assistance.",
+    technologies: ["React", "NestJS", "TypeScript", "Node.js"],
+    color: "deep-rose",
+    side: "right",
+    achievements: [
+      "Built Care Companion platform with secure patient-provider messaging",
+      "Designed and delivered Patient Bridge solution for care continuity",
+      "Implemented real-time communication and proactive engagement workflows",
+      "Architected scalable, high-performance modules enhancing UX and reliability"
+    ]
+  },
+  {
+    id: 2,
     period: "Nov 2021 - Mar 2025",
     position: "Lead Software Engineer",
     company: "FoldHealth",
@@ -19,7 +35,7 @@ const timelineItems = [
     ]
   },
   {
-    id: 2,
+    id: 3,
     period: "Jun 2017 - Oct 2021",
     position: "Senior Member of Technical Staff",
     company: "AthenaHealth",
@@ -35,7 +51,7 @@ const timelineItems = [
     ]
   },
   {
-    id: 3,
+    id: 4,
     period: "Jun 2014 - Oct 2017",
     position: "Web Developer",
     company: "Praxify",
@@ -92,25 +108,69 @@ export default function TimelineSection() {
         </motion.div>
 
         <div className="relative">
-          {/* Timeline line */}
-          <div className="absolute left-1/2 transform -translate-x-0.5 w-1 h-full bg-gradient-to-b from-medical-blue to-healthcare-green"></div>
+          {/* Timeline line - hidden on mobile, visible on lg */}
+          <div className="hidden lg:block absolute left-1/2 transform -translate-x-0.5 w-1 h-full bg-gradient-to-b from-medical-blue to-healthcare-green"></div>
+
+          {/* Mobile timeline line */}
+          <div className="lg:hidden absolute left-4 top-0 w-1 h-full bg-gradient-to-b from-medical-blue to-healthcare-green"></div>
 
           {timelineItems.map((item, index) => (
             <motion.div
               key={item.id}
               data-item-id={item.id}
-              className={`relative flex items-center justify-between mb-16 ${
-                item.side === "left" ? "flex-row-reverse" : ""
+              className={`relative mb-8 lg:mb-16 lg:flex lg:items-center lg:justify-between ${
+                item.side === "left" ? "lg:flex-row-reverse" : ""
               }`}
-              initial={{ opacity: 0, x: item.side === "left" ? 50 : -50 }}
+              initial={{ opacity: 0, x: -30 }}
               animate={{
                 opacity: visibleItems.includes(item.id) ? 1 : 0,
-                x: visibleItems.includes(item.id) ? 0 : item.side === "left" ? 50 : -50,
+                x: visibleItems.includes(item.id) ? 0 : -30,
               }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
               data-testid={`timeline-item-${item.id}`}
             >
-              <div className={`w-5/12 ${item.side === "left" ? "pl-8" : "text-right pr-8"}`}>
+              {/* Mobile layout */}
+              <div className="lg:hidden pl-12 pr-4">
+                <div
+                  className={`absolute left-2 top-0 w-5 h-5 bg-${item.color} rounded-full border-4 border-white shadow-lg`}
+                ></div>
+                <div
+                  className={`bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-l-4 border-${item.color}`}
+                >
+                  <div className={`text-sm font-medium mb-2 text-${item.color}`}>
+                    {item.period}
+                  </div>
+                  <h3 className="text-lg font-bold text-charcoal mb-1">{item.position}</h3>
+                  <h4 className="text-base text-deep-rose font-medium mb-2">{item.company}</h4>
+                  <p className="text-gray-600 text-sm mb-3">{item.description}</p>
+
+                  <div className="mb-3">
+                    <h5 className="text-sm font-medium text-charcoal mb-2">Key Achievements:</h5>
+                    <ul className="text-xs text-gray-600 space-y-1">
+                      {item.achievements.map((achievement, idx) => (
+                        <li key={idx} className="flex items-start">
+                          <div className="w-1.5 h-1.5 bg-healthcare-green rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                          <span>{achievement}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5">
+                    {item.technologies.map((tech) => (
+                      <span
+                        key={tech}
+                        className={`px-2 py-1 bg-${item.color}/10 text-${item.color} text-xs rounded`}
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop layout */}
+              <div className={`hidden lg:block w-5/12 ${item.side === "left" ? "pl-8" : "text-right pr-8"}`}>
                 <div
                   className={`bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 ${
                     item.side === "left" ? `border-r-4 border-${item.color}` : `border-l-4 border-${item.color}`
@@ -122,14 +182,14 @@ export default function TimelineSection() {
                   <h3 className="text-xl font-bold text-charcoal mb-2">{item.position}</h3>
                   <h4 className="text-lg text-deep-rose font-medium mb-3">{item.company}</h4>
                   <p className="text-gray-600 text-sm mb-4">{item.description}</p>
-                  
+
                   <div className="mb-4">
                     <h5 className="text-sm font-medium text-charcoal mb-2">Key Achievements:</h5>
                     <ul className="text-xs text-gray-600 space-y-1">
                       {item.achievements.map((achievement, idx) => (
-                        <li key={idx} className="flex items-center">
-                          <div className="w-1.5 h-1.5 bg-healthcare-green rounded-full mr-2"></div>
-                          {achievement}
+                        <li key={idx} className="flex items-start">
+                          <div className="w-1.5 h-1.5 bg-healthcare-green rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                          <span>{achievement}</span>
                         </li>
                       ))}
                     </ul>
@@ -147,12 +207,12 @@ export default function TimelineSection() {
                   </div>
                 </div>
               </div>
-              
+
               <div
-                className={`absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-${item.color} rounded-full border-4 border-white shadow-lg`}
+                className={`hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-${item.color} rounded-full border-4 border-white shadow-lg`}
               ></div>
-              
-              <div className="w-5/12"></div>
+
+              <div className="hidden lg:block w-5/12"></div>
             </motion.div>
           ))}
         </div>

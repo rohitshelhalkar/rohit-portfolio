@@ -40,7 +40,7 @@ export default function HeroSection() {
                 <span className="text-medical-blue">Technology</span> Leader
               </motion.h1>
               <motion.p
-                className="text-xl text-gray-600 leading-relaxed"
+                className="text-base sm:text-xl text-gray-600 leading-relaxed"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
@@ -50,31 +50,31 @@ export default function HeroSection() {
             </div>
 
             <motion.div
-              className="flex flex-wrap gap-4"
+              className="flex flex-wrap gap-2 sm:gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              <span className="px-4 py-2 bg-medical-blue/10 text-medical-blue rounded-full text-sm font-medium">
+              <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-medical-blue/10 text-medical-blue rounded-full text-xs sm:text-sm font-medium">
                 Full-Stack Development
               </span>
-              <span className="px-4 py-2 bg-healthcare-green/10 text-healthcare-green rounded-full text-sm font-medium">
+              <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-healthcare-green/10 text-healthcare-green rounded-full text-xs sm:text-sm font-medium">
                 Healthcare Domain
               </span>
-              <span className="px-4 py-2 bg-warm-orange/10 text-warm-orange rounded-full text-sm font-medium">
+              <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-warm-orange/10 text-warm-orange rounded-full text-xs sm:text-sm font-medium">
                 Team Leadership
               </span>
             </motion.div>
 
             <motion.div
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
               <button
                 onClick={scrollToProjects}
-                className="bg-medical-blue text-white px-8 py-3 rounded-lg hover:bg-medical-blue/90 transition-colors duration-200 font-medium flex items-center justify-center gap-2"
+                className="bg-medical-blue text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg hover:bg-medical-blue/90 transition-colors duration-200 font-medium flex items-center justify-center gap-2 text-sm sm:text-base"
                 data-testid="button-view-work"
               >
                 View My Work
@@ -82,7 +82,7 @@ export default function HeroSection() {
               </button>
               <button
                 onClick={downloadResume}
-                className="border border-medical-blue text-medical-blue px-8 py-3 rounded-lg hover:bg-medical-blue hover:text-white transition-colors duration-200 font-medium flex items-center justify-center gap-2"
+                className="border border-medical-blue text-medical-blue px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg hover:bg-medical-blue hover:text-white transition-colors duration-200 font-medium flex items-center justify-center gap-2 text-sm sm:text-base"
                 data-testid="button-download-resume"
               >
                 <Download className="h-4 w-4" />
@@ -91,22 +91,22 @@ export default function HeroSection() {
             </motion.div>
 
             <motion.div
-              className="grid grid-cols-3 gap-8 pt-8 border-t border-gray-200"
+              className="grid grid-cols-3 gap-4 sm:gap-8 pt-6 sm:pt-8 border-t border-gray-200"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.0 }}
             >
               <div className="text-center" data-testid="stat-experience">
-                <div className="text-2xl font-bold text-medical-blue">10+</div>
-                <div className="text-sm text-gray-600">Years Experience</div>
+                <div className="text-xl sm:text-2xl font-bold text-medical-blue">10+</div>
+                <div className="text-xs sm:text-sm text-gray-600">Years Experience</div>
               </div>
               <div className="text-center" data-testid="stat-projects">
-                <div className="text-2xl font-bold text-healthcare-green">50+</div>
-                <div className="text-sm text-gray-600">Projects Delivered</div>
+                <div className="text-xl sm:text-2xl font-bold text-healthcare-green">50+</div>
+                <div className="text-xs sm:text-sm text-gray-600">Projects Delivered</div>
               </div>
               <div className="text-center" data-testid="stat-team">
-                <div className="text-2xl font-bold text-warm-orange">5+</div>
-                <div className="text-sm text-gray-600">Team Members Led</div>
+                <div className="text-xl sm:text-2xl font-bold text-warm-orange">5+</div>
+                <div className="text-xs sm:text-sm text-gray-600">Team Members Led</div>
               </div>
             </motion.div>
           </motion.div>
@@ -124,14 +124,14 @@ export default function HeroSection() {
               data-testid="img-hero-profile"
             />
             <motion.div
-              className="absolute -bottom-6 -right-6 bg-white p-6 rounded-xl shadow-lg"
+              className="absolute -bottom-4 left-4 right-4 sm:left-auto sm:right-0 sm:-bottom-6 sm:-right-6 bg-white p-4 sm:p-6 rounded-xl shadow-lg"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 1.2 }}
             >
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center justify-center sm:justify-start space-x-3">
                 <div className="w-3 h-3 bg-healthcare-green rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium text-charcoal">Available for new opportunities</span>
+                <span className="text-xs sm:text-sm font-medium text-charcoal">Available for new opportunities</span>
               </div>
             </motion.div>
           </motion.div>

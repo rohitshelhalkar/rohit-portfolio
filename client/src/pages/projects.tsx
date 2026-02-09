@@ -17,6 +17,7 @@ const allProjects = [
       "Integrated Power BI and BigQuery for advanced analytics",
       "Created dynamic reporting engine without code changes",
       "Implemented complete login, authentication & authorization with JWT rotational keys",
+      "Real-time messaging system enabling seamless provider-to-provider  and provider-to-patient communication",
       "Real-time omnichannel communication system"
     ],
     teamSize: "5+ engineers"
@@ -47,12 +48,11 @@ const allProjects = [
     description: "Built secure real-time messaging system enabling seamless provider-to-provider communication with end-to-end encryption and compliance features.",
     longDescription: "Developed a comprehensive secure communication platform for healthcare providers featuring real-time messaging, file sharing, and video conferencing capabilities. The system includes end-to-end encryption, audit trails for compliance, and integration with existing EHR systems. Implemented advanced features like message threading, read receipts, and priority messaging for urgent communications.",
     image: "https://images.unsplash.com/photo-1560472355-536de3962603?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800",
-    technologies: ["React", "Node.js", "WebSockets", "Redis", "JWT", "WebRTC"],
+    technologies: ["Vue.Js", "JAVA", "SprintBoot", "Redis", "JWT"],
     achievements: [
       "End-to-end encryption for all communications",
       "Real-time messaging with high availability",
       "HIPAA-compliant audit trails and logging",
-      "Integration with major EHR systems",
       "Support for concurrent users"
     ],
     teamSize: "4+ engineers"
@@ -62,14 +62,13 @@ const allProjects = [
     title: "Medical Imaging & Unified Health Records",
     company: "AthenaHealth",
     period: "Jun 2017 - Oct 2021",
-    description: "Developed medical imaging viewer for real-time diagnostic scan access and designed unified health record views aggregating data from multiple systems with reconciliation workflows.",
+    description: "Developed medical imaging viewer for diagnostic scan access and designed unified health record views aggregating data from multiple systems with reconciliation workflows.",
     longDescription: "After AthenaHealth acquired Praxify, I contributed to multiple healthcare technology solutions. Developed a sophisticated medical imaging viewer that enables healthcare providers to access and review diagnostic scans in real-time. Built an internal configuration management system for microservices and frontend applications. Designed unified health record views that aggregate patient data from multiple healthcare systems with advanced reconciliation workflows to ensure data consistency and accuracy.",
     image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800",
     technologies: ["Java", "Angular", "Vue.js", "React", "Vert.x", "Redis", "Spring Boot", "DICOM"],
     achievements: [
-      "Real-time diagnostic scan viewing with optimized load times",
+      "Diagnostic scan viewing with optimized load times",
       "Data reconciliation across multiple healthcare systems",
-      "Secure provider communication platform with end-to-end encryption",
       "Configuration management for microservices",
       "HIPAA-compliant data handling and storage"
     ],
@@ -110,7 +109,7 @@ export default function ProjectsPage() {
               <ArrowLeft className="h-5 w-5 mr-2" />
               Back to Home
             </Link>
-            <h1 className="text-4xl lg:text-5xl font-bold text-charcoal mb-6">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal mb-6">
               Healthcare Technology Projects
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl">
@@ -134,8 +133,8 @@ export default function ProjectsPage() {
                 transition={{ duration: 0.8, delay: index * 0.1 }}
                 data-testid={`project-detail-${project.id}`}
               >
-                <div className="grid lg:grid-cols-2 gap-8">
-                  <div className="relative h-64 lg:h-auto">
+                <div className="grid lg:grid-cols-2 gap-0 lg:gap-8">
+                  <div className="relative h-48 sm:h-64 lg:h-auto">
                     <img
                       src={project.image}
                       alt={project.title}
@@ -147,20 +146,20 @@ export default function ProjectsPage() {
                       </span>
                     </div>
                   </div>
-                  
-                  <div className="p-8">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="flex items-center text-sm text-gray-600">
+
+                  <div className="p-5 sm:p-8">
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-4">
+                      <div className="flex items-center text-xs sm:text-sm text-gray-600">
                         <Calendar className="h-4 w-4 mr-1" />
                         {project.period}
                       </div>
-                      <div className="flex items-center text-sm text-gray-600">
+                      <div className="flex items-center text-xs sm:text-sm text-gray-600">
                         <Users className="h-4 w-4 mr-1" />
                         {project.teamSize}
                       </div>
                     </div>
-                    
-                    <h2 className="text-2xl font-bold text-charcoal mb-4">{project.title}</h2>
+
+                    <h2 className="text-xl sm:text-2xl font-bold text-charcoal mb-4">{project.title}</h2>
                     <p className="text-gray-600 mb-6">{project.longDescription}</p>
 
                     <div className="mb-6">
