@@ -192,26 +192,165 @@ async function sendEmailNotification(contact: {
       'general-inquiry': 'General Inquiry'
     };
 
-    const emailSubject = `Portfolio Contact: ${subjectLabels[contact.subject] || 'New Message'} from ${contact.firstName} ${contact.lastName}`;
+    const emailSubject = `✨ ${subjectLabels[contact.subject] || 'New Message'} from ${contact.firstName} ${contact.lastName}`;
+
+    const subjectColors: Record<string, { bg: string; text: string; icon: string }> = {
+      'job-opportunity': { bg: '#10b981', text: '#ffffff', icon: '💼' },
+      'freelance-project': { bg: '#8b5cf6', text: '#ffffff', icon: '🚀' },
+      'technical-consultation': { bg: '#f59e0b', text: '#ffffff', icon: '💡' },
+      'partnership': { bg: '#3b82f6', text: '#ffffff', icon: '🤝' },
+      'general-inquiry': { bg: '#6b7280', text: '#ffffff', icon: '📩' }
+    };
+
+    const colors = subjectColors[contact.subject] || subjectColors['general-inquiry'];
+    const currentDate = new Date().toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
 
     const htmlContent = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #2563eb;">New Contact Form Submission</h2>
-        <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
-          <p><strong>From:</strong> ${contact.firstName} ${contact.lastName}</p>
-          <p><strong>Email:</strong> <a href="mailto:${contact.email}">${contact.email}</a></p>
-          <p><strong>Subject:</strong> ${subjectLabels[contact.subject] || contact.subject}</p>
-        </div>
-        <div style="padding: 20px; border-left: 4px solid #2563eb;">
-          <h3 style="margin-top: 0;">Message:</h3>
-          <p style="white-space: pre-wrap;">${contact.message}</p>
-        </div>
-        <hr style="margin: 20px 0; border: none; border-top: 1px solid #e5e7eb;">
-        <p style="color: #6b7280; font-size: 12px;">
-          This email was sent from your portfolio contact form.
-          <br>Reply directly to this email to respond to ${contact.firstName}.
-        </p>
-      </div>
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="margin: 0; padding: 0; background-color: #f3f4f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f3f4f6;">
+        <tr>
+          <td align="center" style="padding: 40px 20px;">
+            <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+
+              <!-- Header -->
+              <tr>
+                <td style="background: linear-gradient(135deg, #2563eb 0%, #10b981 100%); padding: 40px 40px 30px;">
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td>
+                        <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700;">
+                          ${colors.icon} New Portfolio Message
+                        </h1>
+                        <p style="margin: 10px 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">
+                          ${currentDate}
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <!-- Subject Badge -->
+              <tr>
+                <td style="padding: 30px 40px 0;">
+                  <table role="presentation" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td style="background-color: ${colors.bg}; color: ${colors.text}; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 600;">
+                        ${subjectLabels[contact.subject] || 'General Inquiry'}
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <!-- Contact Card -->
+              <tr>
+                <td style="padding: 25px 40px;">
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 12px; border: 1px solid #e2e8f0;">
+                    <tr>
+                      <td style="padding: 25px;">
+                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <td width="60" valign="top">
+                              <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 20px; font-weight: bold; text-align: center; line-height: 50px;">
+                                ${contact.firstName.charAt(0).toUpperCase()}${contact.lastName.charAt(0).toUpperCase()}
+                              </div>
+                            </td>
+                            <td style="padding-left: 15px;">
+                              <h2 style="margin: 0 0 5px; color: #1e293b; font-size: 20px; font-weight: 600;">
+                                ${contact.firstName} ${contact.lastName}
+                              </h2>
+                              <a href="mailto:${contact.email}" style="color: #2563eb; text-decoration: none; font-size: 14px;">
+                                ${contact.email}
+                              </a>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <!-- Message -->
+              <tr>
+                <td style="padding: 0 40px 30px;">
+                  <h3 style="margin: 0 0 15px; color: #374151; font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                    📝 Message
+                  </h3>
+                  <div style="background-color: #ffffff; border: 1px solid #e5e7eb; border-left: 4px solid #2563eb; border-radius: 8px; padding: 20px;">
+                    <p style="margin: 0; color: #374151; font-size: 15px; line-height: 1.7; white-space: pre-wrap;">${contact.message}</p>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Action Button -->
+              <tr>
+                <td style="padding: 0 40px 40px;">
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td align="center">
+                        <a href="mailto:${contact.email}?subject=Re: ${encodeURIComponent(subjectLabels[contact.subject] || 'Your inquiry')}"
+                           style="display: inline-block; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 8px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);">
+                          ✉️ Reply to ${contact.firstName}
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <!-- Footer -->
+              <tr>
+                <td style="background-color: #f8fafc; padding: 25px 40px; border-top: 1px solid #e5e7eb;">
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td align="center">
+                        <p style="margin: 0 0 10px; color: #64748b; font-size: 13px;">
+                          This message was sent from your portfolio contact form
+                        </p>
+                        <p style="margin: 0; color: #94a3b8; font-size: 12px;">
+                          🔒 Protected by rate limiting & spam detection
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+            </table>
+
+            <!-- Brand Footer -->
+            <table role="presentation" width="600" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="center" style="padding: 30px 20px;">
+                  <p style="margin: 0; color: #9ca3af; font-size: 12px;">
+                    Rohit Shelhalkar • Healthcare Technology Leader
+                    <br>
+                    <a href="https://rohit-portfolio-psi.vercel.app" style="color: #6b7280; text-decoration: none;">rohit-portfolio-psi.vercel.app</a>
+                  </p>
+                </td>
+              </tr>
+            </table>
+
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
     `;
 
     const response = await fetch('https://api.resend.com/emails', {
