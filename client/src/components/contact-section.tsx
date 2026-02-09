@@ -13,60 +13,60 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Mail, Phone, MapPin, Linkedin, Github, Globe, Shield } from "lucide-react";
 
-// Turnstile Site Key (get from Cloudflare dashboard)
-const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
+// hCaptcha Site Key (get from hcaptcha.com dashboard)
+const HCAPTCHA_SITE_KEY = import.meta.env.VITE_HCAPTCHA_SITE_KEY;
 
 export default function ContactSection() {
   const { toast } = useToast();
   const [formLoadTime] = useState(() => Date.now());
   const [honeypot, setHoneypot] = useState("");
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [hcaptchaToken, setHcaptchaToken] = useState<string | null>(null);
   const [remainingMessages, setRemainingMessages] = useState<number | null>(null);
-  const [showTurnstile, setShowTurnstile] = useState(false);
-  const [turnstileLoaded, setTurnstileLoaded] = useState(false);
-  const turnstileRef = useRef<HTMLDivElement>(null);
-  const turnstileWidgetId = useRef<string | null>(null);
+  const [showHcaptcha, setShowHcaptcha] = useState(false);
+  const [hcaptchaLoaded, setHcaptchaLoaded] = useState(false);
+  const hcaptchaRef = useRef<HTMLDivElement>(null);
+  const hcaptchaWidgetId = useRef<string | null>(null);
 
-  // Load Turnstile script only once
+  // Load hCaptcha script only once
   useEffect(() => {
-    if (!TURNSTILE_SITE_KEY) return;
+    if (!HCAPTCHA_SITE_KEY) return;
 
     // Check if script already exists
-    if (document.querySelector('script[src*="turnstile"]')) {
-      setTurnstileLoaded(true);
+    if (document.querySelector('script[src*="hcaptcha"]')) {
+      setHcaptchaLoaded(true);
       return;
     }
 
     const script = document.createElement('script');
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    script.src = 'https://js.hcaptcha.com/1/api.js?render=explicit';
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);
 
     script.onload = () => {
-      setTurnstileLoaded(true);
+      setHcaptchaLoaded(true);
     };
   }, []);
 
-  // Render Turnstile widget when form is ready and showTurnstile is true
+  // Render hCaptcha widget when form is ready and showHcaptcha is true
   useEffect(() => {
-    if (!TURNSTILE_SITE_KEY || !showTurnstile || !turnstileLoaded) return;
-    if (!turnstileRef.current || turnstileWidgetId.current) return;
+    if (!HCAPTCHA_SITE_KEY || !showHcaptcha || !hcaptchaLoaded) return;
+    if (!hcaptchaRef.current || hcaptchaWidgetId.current) return;
 
     // Small delay to ensure DOM is ready
     const timer = setTimeout(() => {
-      if (turnstileRef.current && (window as any).turnstile) {
-        turnstileWidgetId.current = (window as any).turnstile.render(turnstileRef.current, {
-          sitekey: TURNSTILE_SITE_KEY,
-          appearance: 'interaction-only', // Force manual checkbox click - no auto-verify
-          callback: (token: string) => setTurnstileToken(token),
-          'expired-callback': () => setTurnstileToken(null),
+      if (hcaptchaRef.current && (window as any).hcaptcha) {
+        hcaptchaWidgetId.current = (window as any).hcaptcha.render(hcaptchaRef.current, {
+          sitekey: HCAPTCHA_SITE_KEY,
+          callback: (token: string) => setHcaptchaToken(token),
+          'expired-callback': () => setHcaptchaToken(null),
+          'error-callback': () => setHcaptchaToken(null),
         });
       }
     }, 100);
 
     return () => clearTimeout(timer);
-  }, [showTurnstile, turnstileLoaded]);
+  }, [showHcaptcha, hcaptchaLoaded]);
 
   const form = useForm<InsertContact>({
     resolver: zodResolver(insertContactSchema),
@@ -85,7 +85,7 @@ export default function ContactSection() {
         ...data,
         honeypot,
         timestamp: formLoadTime.toString(),
-        turnstileToken,
+        hcaptchaToken,
       };
       const response = await fetch("/api/contact", {
         method: "POST",
@@ -107,13 +107,13 @@ export default function ContactSection() {
       if (data.remaining !== undefined) {
         setRemainingMessages(data.remaining);
       }
-      // Reset Turnstile state
-      setTurnstileToken(null);
-      setShowTurnstile(false);
-      turnstileWidgetId.current = null;
-      if ((window as any).turnstile && turnstileRef.current) {
-        (window as any).turnstile.remove(turnstileRef.current);
+      // Reset hCaptcha state
+      setHcaptchaToken(null);
+      setShowHcaptcha(false);
+      if (hcaptchaWidgetId.current !== null && (window as any).hcaptcha) {
+        (window as any).hcaptcha.reset(hcaptchaWidgetId.current);
       }
+      hcaptchaWidgetId.current = null;
     },
     onError: (error: Error) => {
       toast({
@@ -137,12 +137,12 @@ export default function ContactSection() {
     watchedFields.subject !== "" &&
     watchedFields.message?.trim() !== "";
 
-  // Show Turnstile when form is complete
+  // Show hCaptcha when form is complete
   useEffect(() => {
-    if (isFormComplete && !showTurnstile && TURNSTILE_SITE_KEY) {
-      setShowTurnstile(true);
+    if (isFormComplete && !showHcaptcha && HCAPTCHA_SITE_KEY) {
+      setShowHcaptcha(true);
     }
-  }, [isFormComplete, showTurnstile]);
+  }, [isFormComplete, showHcaptcha]);
 
   return (
     <section id="contact" className="py-20 bg-gradient-to-br from-medical-blue/5 to-healthcare-green/5">
@@ -301,8 +301,8 @@ export default function ContactSection() {
                   )}
                 />
 
-                {/* Cloudflare Turnstile Widget - Shows after form is filled */}
-                {TURNSTILE_SITE_KEY && (
+                {/* hCaptcha Widget - Shows after form is filled */}
+                {HCAPTCHA_SITE_KEY && (
                   <div className="space-y-3">
                     {!isFormComplete && (
                       <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg text-center">
@@ -312,17 +312,17 @@ export default function ContactSection() {
                         </p>
                       </div>
                     )}
-                    {isFormComplete && !turnstileToken && (
+                    {isFormComplete && !hcaptchaToken && (
                       <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                         <p className="text-sm text-blue-700 text-center mb-3">
-                          Please verify you're human to send your message
+                          Please complete the security challenge
                         </p>
                         <div className="flex justify-center">
-                          <div ref={turnstileRef}></div>
+                          <div ref={hcaptchaRef}></div>
                         </div>
                       </div>
                     )}
-                    {isFormComplete && turnstileToken && (
+                    {isFormComplete && hcaptchaToken && (
                       <div className="p-3 bg-green-50 border border-green-200 rounded-lg flex items-center justify-center gap-2">
                         <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
                           <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -338,15 +338,15 @@ export default function ContactSection() {
                 <Button
                   type="submit"
                   className="w-full bg-medical-blue hover:bg-medical-blue/90 disabled:bg-gray-300 disabled:cursor-not-allowed"
-                  disabled={contactMutation.isPending || (TURNSTILE_SITE_KEY && !turnstileToken)}
+                  disabled={contactMutation.isPending || (HCAPTCHA_SITE_KEY && !hcaptchaToken)}
                   data-testid="button-send-message"
                 >
                   {contactMutation.isPending
                     ? "Sending..."
                     : !isFormComplete
                       ? "Complete the form"
-                      : TURNSTILE_SITE_KEY && !turnstileToken
-                        ? "Please verify first"
+                      : HCAPTCHA_SITE_KEY && !hcaptchaToken
+                        ? "Complete security challenge"
                         : "Send Message"}
                 </Button>
 

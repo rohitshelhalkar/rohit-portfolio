@@ -4,7 +4,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 const NTFY_TOPIC = process.env.NTFY_TOPIC || "rohit-portfolio-contact-2026";
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || "rohitshelhalkar17@gmail.com";
-const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
+const HCAPTCHA_SECRET_KEY = process.env.HCAPTCHA_SECRET_KEY;
 const UPSTASH_REDIS_REST_URL = process.env.UPSTASH_REDIS_REST_URL;
 const UPSTASH_REDIS_REST_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
 
@@ -58,20 +58,20 @@ async function checkRateLimit(ip: string): Promise<{ allowed: boolean; remaining
 }
 
 // ============================================
-// SECURITY: Cloudflare Turnstile Verification
+// SECURITY: hCaptcha Verification
 // ============================================
-async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
-  if (!TURNSTILE_SECRET_KEY) {
-    console.log('Turnstile not configured - skipping verification');
+async function verifyHcaptcha(token: string, ip: string): Promise<boolean> {
+  if (!HCAPTCHA_SECRET_KEY) {
+    console.log('hCaptcha not configured - skipping verification');
     return true;
   }
 
   try {
-    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    const response = await fetch('https://hcaptcha.com/siteverify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
-        secret: TURNSTILE_SECRET_KEY,
+        secret: HCAPTCHA_SECRET_KEY,
         response: token,
         remoteip: ip
       })
@@ -80,7 +80,7 @@ async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
     const data = await response.json();
     return data.success === true;
   } catch (error) {
-    console.error('Turnstile verification failed:', error);
+    console.error('hCaptcha verification failed:', error);
     return false;
   }
 }
@@ -400,7 +400,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       email,
       subject,
       message,
-      turnstileToken,  // Cloudflare Turnstile token
+      hcaptchaToken,   // hCaptcha token
       honeypot,        // Honeypot field (should be empty)
       timestamp        // Form load timestamp
     } = req.body;
@@ -446,12 +446,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // ============================================
-    // SECURITY CHECK 4: Cloudflare Turnstile
+    // SECURITY CHECK 4: hCaptcha Verification
     // ============================================
-    if (TURNSTILE_SECRET_KEY && turnstileToken) {
-      const isHuman = await verifyTurnstile(turnstileToken, ip);
+    if (HCAPTCHA_SECRET_KEY && hcaptchaToken) {
+      const isHuman = await verifyHcaptcha(hcaptchaToken, ip);
       if (!isHuman) {
-        console.log(`Turnstile verification failed from IP: ${ip}`);
+        console.log(`hCaptcha verification failed from IP: ${ip}`);
         return res.status(400).json({
           success: false,
           message: 'Security verification failed. Please try again.'
