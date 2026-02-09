@@ -47,7 +47,7 @@ const allProjects = [
     period: "Jun 2018 - Dec 2020",
     description: "Built secure real-time messaging system enabling seamless provider-to-provider communication with end-to-end encryption and compliance features.",
     longDescription: "Developed a comprehensive secure communication platform for healthcare providers featuring real-time messaging, file sharing, and video conferencing capabilities. The system includes end-to-end encryption, audit trails for compliance, and integration with existing EHR systems. Implemented advanced features like message threading, read receipts, and priority messaging for urgent communications.",
-    image: "https://images.unsplash.com/photo-1560472355-536de3962603?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800",
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800",
     technologies: ["Vue.Js", "JAVA", "SprintBoot", "Redis", "JWT"],
     achievements: [
       "End-to-end encryption for all communications",

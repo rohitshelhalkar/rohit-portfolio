@@ -80,7 +80,7 @@ export default function ContactSection() {
           >
             <h3 className="text-2xl font-bold text-charcoal mb-6">Send a Message</h3>
             <p className="text-sm text-gray-500 mb-4">
-              Messages are stored in the database and can be reviewed through the admin panel.
+              I'll respond to your message within 24-48 hours.
             </p>
             
             <Form {...form}>
@@ -154,10 +154,11 @@ export default function ContactSection() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="collaboration">Collaboration Opportunity</SelectItem>
-                          <SelectItem value="consultation">Technical Consultation</SelectItem>
-                          <SelectItem value="hiring">Hiring Inquiry</SelectItem>
-                          <SelectItem value="general">General Question</SelectItem>
+                          <SelectItem value="job-opportunity">Job Opportunity</SelectItem>
+                          <SelectItem value="freelance-project">Freelance / Contract Project</SelectItem>
+                          <SelectItem value="technical-consultation">Technical Consultation</SelectItem>
+                          <SelectItem value="partnership">Partnership / Collaboration</SelectItem>
+                          <SelectItem value="general-inquiry">General Inquiry</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />

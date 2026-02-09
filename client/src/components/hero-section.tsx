@@ -101,11 +101,11 @@ export default function HeroSection() {
                 <div className="text-xs sm:text-sm text-gray-600">Years Experience</div>
               </div>
               <div className="text-center" data-testid="stat-projects">
-                <div className="text-xl sm:text-2xl font-bold text-healthcare-green">50+</div>
+                <div className="text-xl sm:text-2xl font-bold text-healthcare-green">10+</div>
                 <div className="text-xs sm:text-sm text-gray-600">Projects Delivered</div>
               </div>
               <div className="text-center" data-testid="stat-team">
-                <div className="text-xl sm:text-2xl font-bold text-warm-orange">5+</div>
+                <div className="text-xl sm:text-2xl font-bold text-warm-orange">7+</div>
                 <div className="text-xs sm:text-sm text-gray-600">Team Members Led</div>
               </div>
             </motion.div>

@@ -10,7 +10,7 @@ export default function Footer() {
 
           <div className="md:text-center">
             <p className="text-gray-400 text-sm">
-              © 2024 Rohit Shelhalkar. Transforming healthcare through technology.
+              © 2026 Rohit Shelhalkar. Transforming healthcare through technology.
             </p>
           </div>
 

@@ -26,7 +26,7 @@ const timelineItems = [
     description: "As one of the earliest employees, helped define the technology stack and built core product modules from the ground up. Built Healthcare CRM platform, omnichannel communication engine, and complete authentication system.",
     technologies: ["React", "Node.js", "NestJS", "PostgreSQL", "Hasura", "GraphQL", "TypeScript", "JWT"],
     color: "medical-blue",
-    side: "right",
+    side: "left",
     achievements: [
       "Built Healthcare CRM with Stripe payment integration",
       "Developed omnichannel communication engine (in-app, email, SMS)",
@@ -42,7 +42,7 @@ const timelineItems = [
     description: "After AthenaHealth acquired Praxify, moved into senior engineering role contributing to multiple healthcare technology solutions including medical imaging and secure communication platforms.",
     technologies: ["Java", "Angular", "Vue.js", "React", "Vert.x", "Redis", "Spring Boot"],
     color: "healthcare-green",
-    side: "left",
+    side: "right",
     achievements: [
       "Developed medical imaging viewer for real-time diagnostic scans",
       "Built internal configuration management system for microservices",
@@ -58,7 +58,7 @@ const timelineItems = [
     description: "Began career after completing MCA through campus placement. Worked on multi-tenant healthcare applications building modules for patient records and encounter workflows.",
     technologies: ["Java (Servlets, JSF)", "jQuery", "Maven"],
     color: "warm-orange",
-    side: "right",
+    side: "left",
     achievements: [
       "Improved frontend performance with modular jQuery approach",
       "Introduced feature rollout toggles for controlled deployment",
@@ -119,12 +119,12 @@ export default function TimelineSection() {
               key={item.id}
               data-item-id={item.id}
               className={`relative mb-8 lg:mb-16 lg:flex lg:items-center lg:justify-between ${
-                item.side === "left" ? "lg:flex-row-reverse" : ""
+                item.side === "right" ? "lg:flex-row-reverse" : ""
               }`}
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: item.side === "left" ? -30 : 30 }}
               animate={{
                 opacity: visibleItems.includes(item.id) ? 1 : 0,
-                x: visibleItems.includes(item.id) ? 0 : -30,
+                x: visibleItems.includes(item.id) ? 0 : item.side === "left" ? -30 : 30,
               }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
               data-testid={`timeline-item-${item.id}`}
@@ -169,50 +169,95 @@ export default function TimelineSection() {
                 </div>
               </div>
 
-              {/* Desktop layout */}
-              <div className={`hidden lg:block w-5/12 ${item.side === "left" ? "pl-8" : "text-right pr-8"}`}>
-                <div
-                  className={`bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 ${
-                    item.side === "left" ? `border-r-4 border-${item.color}` : `border-l-4 border-${item.color}`
-                  }`}
-                >
-                  <div className={`text-sm font-medium mb-2 text-${item.color}`}>
-                    {item.period}
+              {/* Desktop layout - Left side card */}
+              {item.side === "left" && (
+                <>
+                  <div className="hidden lg:block w-5/12 pr-8 text-right">
+                    <div
+                      className={`bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-r-4 border-${item.color}`}
+                    >
+                      <div className={`text-sm font-medium mb-2 text-${item.color}`}>
+                        {item.period}
+                      </div>
+                      <h3 className="text-xl font-bold text-charcoal mb-2">{item.position}</h3>
+                      <h4 className="text-lg text-deep-rose font-medium mb-3">{item.company}</h4>
+                      <p className="text-gray-600 text-sm mb-4">{item.description}</p>
+
+                      <div className="mb-4 text-left">
+                        <h5 className="text-sm font-medium text-charcoal mb-2">Key Achievements:</h5>
+                        <ul className="text-xs text-gray-600 space-y-1">
+                          {item.achievements.map((achievement, idx) => (
+                            <li key={idx} className="flex items-start">
+                              <div className="w-1.5 h-1.5 bg-healthcare-green rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                              <span>{achievement}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 justify-end">
+                        {item.technologies.map((tech) => (
+                          <span
+                            key={tech}
+                            className={`px-2 py-1 bg-${item.color}/10 text-${item.color} text-xs rounded`}
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-bold text-charcoal mb-2">{item.position}</h3>
-                  <h4 className="text-lg text-deep-rose font-medium mb-3">{item.company}</h4>
-                  <p className="text-gray-600 text-sm mb-4">{item.description}</p>
+                  <div
+                    className={`hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-${item.color} rounded-full border-4 border-white shadow-lg`}
+                  ></div>
+                  <div className="hidden lg:block w-5/12"></div>
+                </>
+              )}
 
-                  <div className="mb-4">
-                    <h5 className="text-sm font-medium text-charcoal mb-2">Key Achievements:</h5>
-                    <ul className="text-xs text-gray-600 space-y-1">
-                      {item.achievements.map((achievement, idx) => (
-                        <li key={idx} className="flex items-start">
-                          <div className="w-1.5 h-1.5 bg-healthcare-green rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
-                          <span>{achievement}</span>
-                        </li>
-                      ))}
-                    </ul>
+              {/* Desktop layout - Right side card */}
+              {item.side === "right" && (
+                <>
+                  <div className="hidden lg:block w-5/12"></div>
+                  <div
+                    className={`hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-${item.color} rounded-full border-4 border-white shadow-lg`}
+                  ></div>
+                  <div className="hidden lg:block w-5/12 pl-8">
+                    <div
+                      className={`bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-l-4 border-${item.color}`}
+                    >
+                      <div className={`text-sm font-medium mb-2 text-${item.color}`}>
+                        {item.period}
+                      </div>
+                      <h3 className="text-xl font-bold text-charcoal mb-2">{item.position}</h3>
+                      <h4 className="text-lg text-deep-rose font-medium mb-3">{item.company}</h4>
+                      <p className="text-gray-600 text-sm mb-4">{item.description}</p>
+
+                      <div className="mb-4">
+                        <h5 className="text-sm font-medium text-charcoal mb-2">Key Achievements:</h5>
+                        <ul className="text-xs text-gray-600 space-y-1">
+                          {item.achievements.map((achievement, idx) => (
+                            <li key={idx} className="flex items-start">
+                              <div className="w-1.5 h-1.5 bg-healthcare-green rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                              <span>{achievement}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        {item.technologies.map((tech) => (
+                          <span
+                            key={tech}
+                            className={`px-2 py-1 bg-${item.color}/10 text-${item.color} text-xs rounded`}
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {item.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className={`px-2 py-1 bg-${item.color}/10 text-${item.color} text-xs rounded`}
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className={`hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-${item.color} rounded-full border-4 border-white shadow-lg`}
-              ></div>
-
-              <div className="hidden lg:block w-5/12"></div>
+                </>
+              )}
             </motion.div>
           ))}
         </div>
