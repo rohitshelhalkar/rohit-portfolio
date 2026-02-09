@@ -5,17 +5,144 @@ import { insertContactSchema } from "@shared/schema";
 import path from "path";
 import fs from "fs";
 
+// ntfy.sh topic for push notifications (change this to your own unique topic)
+const NTFY_TOPIC = process.env.NTFY_TOPIC || "rohit-portfolio-contact-2026";
+
+// Resend API key for email notifications (get free key at resend.com)
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || "rohitshelhalkar17@gmail.com";
+
+// Send email notification via Resend (3000 free emails/month)
+async function sendEmailNotification(contact: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  subject: string;
+  message: string;
+}) {
+  if (!RESEND_API_KEY) {
+    console.log('Resend API key not configured - skipping email notification');
+    return;
+  }
+
+  try {
+    const subjectLabels: Record<string, string> = {
+      'job-opportunity': 'Job Opportunity',
+      'freelance-project': 'Freelance Project',
+      'technical-consultation': 'Technical Consultation',
+      'partnership': 'Partnership',
+      'general-inquiry': 'General Inquiry'
+    };
+
+    const emailSubject = `Portfolio Contact: ${subjectLabels[contact.subject] || 'New Message'} from ${contact.firstName} ${contact.lastName}`;
+
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #2563eb;">New Contact Form Submission</h2>
+        <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <p><strong>From:</strong> ${contact.firstName} ${contact.lastName}</p>
+          <p><strong>Email:</strong> <a href="mailto:${contact.email}">${contact.email}</a></p>
+          <p><strong>Subject:</strong> ${subjectLabels[contact.subject] || contact.subject}</p>
+        </div>
+        <div style="padding: 20px; border-left: 4px solid #2563eb;">
+          <h3 style="margin-top: 0;">Message:</h3>
+          <p style="white-space: pre-wrap;">${contact.message}</p>
+        </div>
+        <hr style="margin: 20px 0; border: none; border-top: 1px solid #e5e7eb;">
+        <p style="color: #6b7280; font-size: 12px;">
+          This email was sent from your portfolio contact form.
+          <br>Reply directly to this email to respond to ${contact.firstName}.
+        </p>
+      </div>
+    `;
+
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Portfolio Contact <onboarding@resend.dev>',
+        to: [NOTIFICATION_EMAIL],
+        reply_to: contact.email,
+        subject: emailSubject,
+        html: htmlContent,
+      }),
+    });
+
+    if (response.ok) {
+      console.log(`Email notification sent for contact from ${contact.email}`);
+    } else {
+      const error = await response.text();
+      console.error('Failed to send email:', error);
+    }
+  } catch (error) {
+    console.error('Failed to send email notification:', error);
+  }
+}
+
+// Send push notification via ntfy.sh (completely free)
+async function sendPushNotification(contact: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  subject: string;
+  message: string;
+}) {
+  try {
+    const subjectLabels: Record<string, string> = {
+      'job-opportunity': 'Job Opportunity',
+      'freelance-project': 'Freelance Project',
+      'technical-consultation': 'Technical Consultation',
+      'partnership': 'Partnership',
+      'general-inquiry': 'General Inquiry'
+    };
+
+    const subjectTags: Record<string, string> = {
+      'job-opportunity': 'briefcase,moneybag',
+      'freelance-project': 'rocket',
+      'technical-consultation': 'bulb',
+      'partnership': 'handshake',
+      'general-inquiry': 'envelope'
+    };
+
+    const title = `New ${subjectLabels[contact.subject] || 'Message'} from ${contact.firstName}`;
+    const body = `From: ${contact.firstName} ${contact.lastName}\nEmail: ${contact.email}\n\nMessage:\n${contact.message}`;
+
+    await fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+      method: 'POST',
+      headers: {
+        'Title': title,
+        'Priority': contact.subject === 'job-opportunity' ? '5' : '3',
+        'Tags': subjectTags[contact.subject] || 'envelope',
+        'Click': `mailto:${contact.email}`,
+      },
+      body: body
+    });
+
+    console.log(`Push notification sent for contact from ${contact.email}`);
+  } catch (error) {
+    console.error('Failed to send push notification:', error);
+  }
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Contact form submission
   app.post("/api/contact", async (req, res) => {
     try {
       const validatedData = insertContactSchema.parse(req.body);
       const contact = await storage.createContact(validatedData);
+
+      // Send notifications (non-blocking)
+      sendPushNotification(validatedData).catch(console.error);
+      sendEmailNotification(validatedData).catch(console.error);
+
       res.json({ success: true, contact });
     } catch (error) {
-      res.status(400).json({ 
-        success: false, 
-        message: error instanceof Error ? error.message : "Invalid contact data" 
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Invalid contact data"
       });
     }
   });
