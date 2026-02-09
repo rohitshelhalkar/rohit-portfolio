@@ -58,6 +58,7 @@ export default function ContactSection() {
       if (turnstileRef.current && (window as any).turnstile) {
         turnstileWidgetId.current = (window as any).turnstile.render(turnstileRef.current, {
           sitekey: TURNSTILE_SITE_KEY,
+          appearance: 'interaction-only', // Force manual checkbox click - no auto-verify
           callback: (token: string) => setTurnstileToken(token),
           'expired-callback': () => setTurnstileToken(null),
         });
