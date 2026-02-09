@@ -22,32 +22,50 @@ export default function ContactSection() {
   const [honeypot, setHoneypot] = useState("");
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [remainingMessages, setRemainingMessages] = useState<number | null>(null);
+  const [showTurnstile, setShowTurnstile] = useState(false);
+  const [turnstileLoaded, setTurnstileLoaded] = useState(false);
   const turnstileRef = useRef<HTMLDivElement>(null);
+  const turnstileWidgetId = useRef<string | null>(null);
 
-  // Load Turnstile script
+  // Load Turnstile script only once
   useEffect(() => {
     if (!TURNSTILE_SITE_KEY) return;
 
+    // Check if script already exists
+    if (document.querySelector('script[src*="turnstile"]')) {
+      setTurnstileLoaded(true);
+      return;
+    }
+
     const script = document.createElement('script');
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);
 
     script.onload = () => {
+      setTurnstileLoaded(true);
+    };
+  }, []);
+
+  // Render Turnstile widget when form is ready and showTurnstile is true
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY || !showTurnstile || !turnstileLoaded) return;
+    if (!turnstileRef.current || turnstileWidgetId.current) return;
+
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(() => {
       if (turnstileRef.current && (window as any).turnstile) {
-        (window as any).turnstile.render(turnstileRef.current, {
+        turnstileWidgetId.current = (window as any).turnstile.render(turnstileRef.current, {
           sitekey: TURNSTILE_SITE_KEY,
           callback: (token: string) => setTurnstileToken(token),
           'expired-callback': () => setTurnstileToken(null),
         });
       }
-    };
+    }, 100);
 
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
+    return () => clearTimeout(timer);
+  }, [showTurnstile, turnstileLoaded]);
 
   const form = useForm<InsertContact>({
     resolver: zodResolver(insertContactSchema),
@@ -88,9 +106,12 @@ export default function ContactSection() {
       if (data.remaining !== undefined) {
         setRemainingMessages(data.remaining);
       }
-      // Reset Turnstile
+      // Reset Turnstile state
+      setTurnstileToken(null);
+      setShowTurnstile(false);
+      turnstileWidgetId.current = null;
       if ((window as any).turnstile && turnstileRef.current) {
-        (window as any).turnstile.reset(turnstileRef.current);
+        (window as any).turnstile.remove(turnstileRef.current);
       }
     },
     onError: (error: Error) => {
@@ -105,6 +126,22 @@ export default function ContactSection() {
   const onSubmit = (data: InsertContact) => {
     contactMutation.mutate(data);
   };
+
+  // Watch form values to determine when form is complete
+  const watchedFields = form.watch();
+  const isFormComplete =
+    watchedFields.firstName?.trim() !== "" &&
+    watchedFields.lastName?.trim() !== "" &&
+    watchedFields.email?.trim() !== "" &&
+    watchedFields.subject !== "" &&
+    watchedFields.message?.trim() !== "";
+
+  // Show Turnstile when form is complete
+  useEffect(() => {
+    if (isFormComplete && !showTurnstile && TURNSTILE_SITE_KEY) {
+      setShowTurnstile(true);
+    }
+  }, [isFormComplete, showTurnstile]);
 
   return (
     <section id="contact" className="py-20 bg-gradient-to-br from-medical-blue/5 to-healthcare-green/5">
@@ -263,20 +300,53 @@ export default function ContactSection() {
                   )}
                 />
 
-                {/* Cloudflare Turnstile Widget */}
+                {/* Cloudflare Turnstile Widget - Shows after form is filled */}
                 {TURNSTILE_SITE_KEY && (
-                  <div className="flex justify-center">
-                    <div ref={turnstileRef}></div>
+                  <div className="space-y-3">
+                    {!isFormComplete && (
+                      <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg text-center">
+                        <Shield className="h-5 w-5 mx-auto mb-2 text-gray-400" />
+                        <p className="text-sm text-gray-500">
+                          Complete the form above to verify you're human
+                        </p>
+                      </div>
+                    )}
+                    {isFormComplete && !turnstileToken && (
+                      <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <p className="text-sm text-blue-700 text-center mb-3">
+                          Please verify you're human to send your message
+                        </p>
+                        <div className="flex justify-center">
+                          <div ref={turnstileRef}></div>
+                        </div>
+                      </div>
+                    )}
+                    {isFormComplete && turnstileToken && (
+                      <div className="p-3 bg-green-50 border border-green-200 rounded-lg flex items-center justify-center gap-2">
+                        <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                          <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                        <span className="text-sm text-green-700 font-medium">Verified - Ready to send</span>
+                      </div>
+                    )}
                   </div>
                 )}
 
                 <Button
                   type="submit"
-                  className="w-full bg-medical-blue hover:bg-medical-blue/90"
+                  className="w-full bg-medical-blue hover:bg-medical-blue/90 disabled:bg-gray-300 disabled:cursor-not-allowed"
                   disabled={contactMutation.isPending || (TURNSTILE_SITE_KEY && !turnstileToken)}
                   data-testid="button-send-message"
                 >
-                  {contactMutation.isPending ? "Sending..." : "Send Message"}
+                  {contactMutation.isPending
+                    ? "Sending..."
+                    : !isFormComplete
+                      ? "Complete the form"
+                      : TURNSTILE_SITE_KEY && !turnstileToken
+                        ? "Please verify first"
+                        : "Send Message"}
                 </Button>
 
                 <p className="text-xs text-gray-400 text-center flex items-center justify-center gap-1">
